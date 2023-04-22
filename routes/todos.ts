@@ -2,6 +2,9 @@ import { Router } from "express" ;
 
 import { Todo } from "../models/todos"
 
+type requestBody = { text : string }
+type requestParams = { id : number }
+
 let todos : Todo[] = [];
 
 const router = Router();
@@ -11,9 +14,10 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/', (req,res,next) => {
+    const body = req.body as requestBody
     const newTodo : Todo= {
         id : todos.length + 1 ,
-        text : req.body.text
+        text : body.text
     }
 
     todos.push(newTodo)
@@ -21,7 +25,8 @@ router.post('/', (req,res,next) => {
 })
 
 router.delete('/:id', (req, res, next) => {
-    const id = +req.params.id
+    const params = req.params
+    const id = +params.id
     const prevLen = todos.length
     todos = todos.filter((todo : Todo) =>{
         return todo.id != id
@@ -35,8 +40,9 @@ router.delete('/:id', (req, res, next) => {
 }) 
 
 router.put('/:id',(req, res, next) => {
+    const body = req.body as requestBody
     const id  = +req.params.id;
-    const newTodo = req.body.text;
+    const newTodo = body.text;
     let todoPositive = false ;
 
     todos.map(todo => {
