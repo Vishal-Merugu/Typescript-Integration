@@ -7,15 +7,17 @@ router.get('/', (req, res, next) => {
     res.status(200).json({ todos: todos });
 });
 router.post('/', (req, res, next) => {
+    const body = req.body;
     const newTodo = {
         id: todos.length + 1,
-        text: req.body.text
+        text: body.text
     };
     todos.push(newTodo);
     res.status(200).json(newTodo);
 });
 router.delete('/:id', (req, res, next) => {
-    const id = +req.params.id;
+    const params = req.params;
+    const id = +params.id;
     const prevLen = todos.length;
     todos = todos.filter((todo) => {
         return todo.id != id;
@@ -28,8 +30,9 @@ router.delete('/:id', (req, res, next) => {
     res.status(200).json({ success: true });
 });
 router.put('/:id', (req, res, next) => {
+    const body = req.body;
     const id = +req.params.id;
-    const newTodo = req.body.text;
+    const newTodo = body.text;
     let todoPositive = false;
     todos.map(todo => {
         if (todo.id == id) {
